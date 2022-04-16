@@ -26,7 +26,8 @@ class Project(models.Model):
     def __str__(self) :
         return (f"{self.title} : {self.owner}")
 
-    #classer nos projets par ordre d'ancienneté
+    #pour classer nos projets par ordre d'ancienneté : 
+    # ['-created'] 
 
     class Meta : 
         ordering = ['-vote_ratio', '-vote_total', 'title'] # ['-created'] pour faire l'inverse

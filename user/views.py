@@ -33,7 +33,7 @@ def loginUser(request):
           login(request, user)
           #return redirect('profiles')
           #pour etre rediriger à la page demandée après connexion
-          # a une seule condition : on efface le contenu de action ="" de login_register partie login.
+          # a une seule condition : on efface le contenu de action ="" de login_register 'partie login'.
           return redirect(request.GET['next'] if 'next' in request.GET else 'account')
       else:
           messages.error(request,'username or password is incorrect')
