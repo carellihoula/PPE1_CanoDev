@@ -63,7 +63,7 @@ def registerUser(request):
             user.username=user.username.lower()
             user.save()
             if  User.objects.filter(email=email).exists():
-                raise ValidationError('Email Already Exists')
+                messages.info(request, 'Email Already Exists')
             else:    
                 login(request, user)
                 return redirect('edit-account')
