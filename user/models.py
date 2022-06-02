@@ -13,7 +13,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     username = models.CharField(max_length=200, null=True, blank=True)
     location = models.CharField(max_length=200, null=True, blank=True)
-    email =models.EmailField(max_length=500, blank=True, null=True)
+    email = models.EmailField(max_length=500, blank=True, null=True)
     short_intro = models.CharField(max_length=80, null=True, blank=True)
     #bio = models.CharField(max_length=150, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)

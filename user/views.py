@@ -9,6 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm, MessageForm
 from django.db.models import Q
 from .utils import searchProfiles, paginateProfiles
+from django.forms import ValidationError
 
 
 
@@ -21,9 +22,11 @@ def loginUser(request):
     if request.method =="POST":
       username = request.POST['username']
       password = request.POST['password']
+      
 
       try:
           user = User.objects.get(username=username)
+
       except:
           messages.error(request, "Username doesn't exist")
 
@@ -53,13 +56,17 @@ def registerUser(request):
     
     if request.method =='POST':
         form = CustomUserCreationForm(request.POST)
+        email = request.POST['email']
         if form.is_valid():
+            
             user = form.save(commit=False)
             user.username=user.username.lower()
             user.save()
-            
-            login(request, user)
-            return redirect('edit-account')
+            if  User.objects.filter(email=email).exists():
+                raise ValidationError('Email Already Exists')
+            else:    
+                login(request, user)
+                return redirect('edit-account')
 
         else:
             messages.error(request, 'An error has occured during registration')
@@ -219,3 +226,4 @@ def createMessage(request, pk):
 
     context ={'recipient':recipient, 'form':form}
     return render(request, 'user/message_form.html', context)
+
