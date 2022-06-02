@@ -73,16 +73,13 @@ def registerUser(request):
 def profiles(request):
     profiles, search_query = searchProfiles(request)
     custom_range, profiles = paginateProfiles(request, profiles, 3)
-
-
-
+    
     context = {'profiles':profiles, 'search_query': search_query, 'custom_range':custom_range}
     return render(request, 'user/profiles.html', context)
 
 
 def userProfile(request, pk):
     profile = Profile.objects.get(id=pk)
-
     topSkills = profile.skill_set.exclude(description__exact="")
 
     otherSkills = profile.skill_set.filter(description="")
@@ -185,6 +182,15 @@ def viewMessage(request, pk):
     context = {'message':message}
     return render(request, 'user/message.html', context)
 
+def deleteMessage(request, pk):
+    profile = request.user.profile
+    message = profile.messages.get(id=pk)
+    context={'sms':message}
+    if request.method == "POST":
+        message.delete()
+        return redirect('inbox')
+    return render(request, 'user/delete_message.html', context)
+    
 
 def createMessage(request, pk):
 

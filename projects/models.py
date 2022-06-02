@@ -3,7 +3,8 @@ from random import choices
 from django.db import models
 import uuid
 from user.models import Profile
-#from django.contrib.auth.models import User
+from django.contrib.auth.models import User
+
 
 """ Les models nous permet de créer les entrées dans notre base de données : 
  ils permettent la creations de nos tables de base de données."""
@@ -22,9 +23,12 @@ class Project(models.Model):
     vote_ratio = models.IntegerField(default=0, null = True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    
 
     def __str__(self) :
         return (f"{self.title} : {self.owner}")
+
+    
 
     #pour classer nos projets par ordre d'ancienneté : 
     # ['-created'] 
@@ -59,14 +63,19 @@ class Review(models.Model):
     body = models.TextField(null=True, blank=True)
     value = models.CharField(max_length=300, choices=VOTE_TYPE)
     created = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='like')
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     
+    """Pour un seul commentaire pour un seul utilisateur : 
     class Meta:
-        unique_together = [['owner', 'project']]
+        unique_together = [['owner', 'project']]"""
 
 
     def __str__(self):
         return f" {self.project} : {self.value}"
+    
+    def total_likes(self):
+        return self.likes.count()
 
 #tableau outils utilisés pour réaliser le projet
 
@@ -77,4 +86,3 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-

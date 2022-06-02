@@ -2,7 +2,7 @@ from multiprocessing import context
 from re import search
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Project, Tag
+from .models import Project, Tag, Review
 from .forms import ProjectForm, ReviewForm
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -18,6 +18,7 @@ def projects(request):
 
 
 def project(request, pk):
+    
     projectObj = Project.objects.get(id=pk)
     form = ReviewForm()
 

@@ -1,6 +1,6 @@
 {%extends 'main.html'%}
 
-{%block content%}
+{% block content%}
 
 <main class="singleProject my-md">
     <div class="container">
@@ -50,11 +50,17 @@
             </h5>
             {% if request.user.profile.id in projectObj.reviewers %}
 
-            <p>You have already submitted your review for this project</p>
-
-            {% elif request.user.profile == projectObj.owner%}
-
-            <p>You cannot review your own work</p>
+            <form class="form" action="{% url 'project' projectObj.id%}" method="POST">
+              {% csrf_token %}
+              {% for field in form %}
+              <!-- Textarea -->
+              <div class="form__field">
+                <label for="formInput#textarea">{{field.label}}</label>
+                {{field}}
+              </div>
+              {%endfor%}
+              <input class="btn btn--sub btn--lg" type="submit" value="Add Review" />
+            </form>
 
             {% elif request.user.is_authenticated %}
 
@@ -86,6 +92,9 @@
                   <p class="comment__info">
                     {{review.body | linebreaksbr}}
                   </p>
+                  {%for li in like.items%}
+                    {{li}}
+                  {%endfor%}
                 </div>
                 
               </div>
@@ -98,4 +107,4 @@
     </div>
     </div>
   </main>
-{%endblock content %}
+{% endblock content %}
